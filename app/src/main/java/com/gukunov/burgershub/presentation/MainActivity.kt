@@ -46,9 +46,19 @@ import com.gukunov.burgershub.domain.uiModel.BurgerUIState
 import com.gukunov.burgershub.ui.theme.BurgersHubTheme
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
+import coil.compose.AsyncImage
 import coil.compose.rememberImagePainter
 import com.gukunov.burgershub.domain.entity.BurgerItem
 import com.gukunov.burgershub.domain.uiModel.BurgerItemUIModel
@@ -57,23 +67,98 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val burgerListViewModel: BurgerListViewModel by viewModels()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
-            burgerListViewModel.getBurgerList()
-
         setContent {
-            BurgerListScreen(burgerListViewModel)
+            //BurgerListScreen()
+            BurgerListScreen()
+        }
+    }
+
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BurgerListScreen(viewModel: BurgerListViewModel = hiltViewModel()) {
+    val burgerList by viewModel.burgers.collectAsState(initial = emptyList())
+//    BurgerList(burgers = burgerList)
+
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                titleContentColor = MaterialTheme.colorScheme.primary,),
+                modifier = Modifier.clip(RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp)),
+                title = {
+                    Text(
+                        text = "BurgersHub",
+                        fontSize = 24.sp,
+                        color = MaterialTheme.colorScheme.primary)
+
+                })
+        }
+    ) { paddingValues ->
+        BurgerList(burgers = burgerList, modifier = Modifier.padding(paddingValues))
+    }
+
+}
+
+@Composable
+fun BurgerList(burgers: List<BurgerItem>?, modifier: Modifier = Modifier) {
+    burgers?.let {
+        LazyColumn(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(top = 8.dp, bottom = 30.dp),
+            contentPadding = PaddingValues(16.dp)
+        ) {
+            items(burgers) { burger ->
+                BurgerItemView(burger)
+            }
         }
     }
 }
 
+@Composable
+fun BurgerItemView(burger: BurgerItem) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 8.dp, end = 8.dp, bottom = 10.dp, top = 10.dp),
+        shape = RoundedCornerShape(8.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
 
+    ) {
+        Image(
+            painter = rememberImagePainter(burger.images.firstOrNull()?.sm),
+            contentDescription = null,
+            modifier = Modifier
+                .size(64.dp)
+                .clip(CircleShape),
+            contentScale = ContentScale.Crop
+        )
+        burger.name?.let {
+            Text(
+                text = it,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .padding(16.dp)
+            )
+        }
+    }
+}
+}
 
+/*
 @Composable
 fun BurgerItem(burger: BurgerItem) {
     Row(
@@ -96,19 +181,26 @@ fun BurgerItem(burger: BurgerItem) {
 }
 
 @Composable
-fun BurgerListScreen(viewModel: BurgerListViewModel) {
+fun BurgerListScreen(viewModel: BurgerListViewModel = hiltViewModel()) {
+    LaunchedEffect(Unit) {
+        viewModel.getBurgerList()
+    }
     val burgers by viewModel.burgers.observeAsState()
     val bg = listOf("dfd", "gfggf", "sdfsdg", "etyhe", "wetrtwert", "vfdgre")
+    LaunchedEffect(Unit) {
+        viewModel.getBurgerList()
+    }
+
     LazyColumn {
  //       burgers?.let {
-            items(burgers!!) {
+            items(burgers?: emptyList()) {
                 BurgerItem(it)
             }
 //        }
     }
 }
 
-
+*/
 
 
 

@@ -24,11 +24,17 @@ class BurgerListViewModel @Inject constructor(
 ) : ViewModel() {
     val state: MutableStateFlow<State?> = MutableStateFlow(null)
 
+    val burgers: MutableStateFlow<List<BurgerItem>?> = MutableStateFlow(null)
 
-    private var _burgers = MutableLiveData<List<BurgerItem>?>()
-    val burgers: LiveData<List<BurgerItem>?> = _burgers
 
-    fun getBurgerList() {
+//    private var _burgers = MutableLiveData<List<BurgerItem>?>()
+//    val burgers: LiveData<List<BurgerItem>?> = _burgers
+
+    init {
+        getBurgerList()
+    }
+
+    private fun getBurgerList() {
         viewModelScope.launch {
             getBurgerListUseCase.execute().collectLatest { burger ->
                 when(burger){
@@ -37,7 +43,7 @@ class BurgerListViewModel @Inject constructor(
                     is Resource.Success ->{
                         state.emit(State.success())
                         burger.data.let {
-                            _burgers.postValue(burger.data)
+                            burgers.emit(it)
                         }
                     }
                 }

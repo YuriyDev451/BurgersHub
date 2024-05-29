@@ -55,11 +55,13 @@ android {
 }
 
 dependencies {
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
 
-
     implementation("io.coil-kt:coil-compose:2.6.0")
-
 
     implementation("com.google.dagger:hilt-android:2.46")
     implementation("androidx.annotation:annotation:1.7.1")
