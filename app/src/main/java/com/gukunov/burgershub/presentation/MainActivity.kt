@@ -47,15 +47,30 @@ import com.gukunov.burgershub.ui.theme.BurgersHubTheme
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
 import coil.compose.AsyncImage
@@ -74,6 +89,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             //BurgerListScreen()
             BurgerListScreen()
+
+
         }
     }
 
@@ -99,7 +116,38 @@ fun BurgerListScreen(viewModel: BurgerListViewModel = hiltViewModel()) {
                         color = MaterialTheme.colorScheme.primary)
 
                 })
-        }
+        },
+        bottomBar = {
+            BottomAppBar(
+                actions = {
+                    Row(modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically) {
+                        IconButton(onClick = { /* do something */ }) {
+                            Icon(Icons.Filled.Check, contentDescription = "Localized description")
+                        }
+                        IconButton(onClick = { /* do something */ }) {
+                            Icon(
+                                Icons.Filled.Edit,
+                                contentDescription = "Localized description",
+                            )
+                        }
+                        IconButton(onClick = { /* do something */ }) {
+                            Icon(
+                                Icons.Filled.Edit,
+                                contentDescription = "Localized description",
+                            )
+                        }
+                        IconButton(onClick = { /* do something */ }) {
+                            Icon(
+                                Icons.Filled.Edit,
+                                contentDescription = "Localized description",
+                            )
+                        }
+                    }
+
+                })
+        },
     ) { paddingValues ->
         BurgerList(burgers = burgerList, modifier = Modifier.padding(paddingValues))
     }
@@ -157,6 +205,21 @@ fun BurgerItemView(burger: BurgerItem) {
     }
 }
 }
+
+//@Composable
+//fun BottomAppBar(
+//    modifier: Modifier = Modifier,
+//    containerColor: Color = BottomAppBarDefaults.containerColor,
+//    contentColor: Color = contentColorFor(containerColor),
+//    tonalElevation: Dp = BottomAppBarDefaults.ContainerElevation,
+//    contentPadding: PaddingValues = BottomAppBarDefaults.ContentPadding,
+//    windowInsets: WindowInsets = BottomAppBarDefaults.windowInsets,
+//    content: @Composable RowScope.() -> Unit
+//): Unit{
+//
+//}
+
+
 
 /*
 @Composable
