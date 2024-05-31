@@ -1,5 +1,6 @@
 package com.gukunov.burgershub.presentation
 
+import android.content.res.Resources.Theme
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -46,6 +47,7 @@ import com.gukunov.burgershub.domain.uiModel.BurgerUIState
 import com.gukunov.burgershub.ui.theme.BurgersHubTheme
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
@@ -53,9 +55,13 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -77,6 +83,7 @@ import coil.compose.AsyncImage
 import coil.compose.rememberImagePainter
 import com.gukunov.burgershub.domain.entity.BurgerItem
 import com.gukunov.burgershub.domain.uiModel.BurgerItemUIModel
+import com.gukunov.burgershub.presentation.navigation.AppNavigation
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -88,7 +95,11 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             //BurgerListScreen()
-            BurgerListScreen()
+//Theme
+//            Scaffold {
+//
+//            }
+            AppNavigation()
 
 
         }
@@ -107,7 +118,7 @@ fun BurgerListScreen(viewModel: BurgerListViewModel = hiltViewModel()) {
         topBar = {
             CenterAlignedTopAppBar(colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
-                titleContentColor = MaterialTheme.colorScheme.primary,),
+                titleContentColor = MaterialTheme.colorScheme.primary),
                 modifier = Modifier.clip(RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp)),
                 title = {
                     Text(
@@ -117,40 +128,43 @@ fun BurgerListScreen(viewModel: BurgerListViewModel = hiltViewModel()) {
 
                 })
         },
-        bottomBar = {
-            BottomAppBar(
-                actions = {
-                    Row(modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        verticalAlignment = Alignment.CenterVertically) {
-                        IconButton(onClick = { /* do something */ }) {
-                            Icon(Icons.Filled.Check, contentDescription = "Localized description")
-                        }
-                        IconButton(onClick = { /* do something */ }) {
-                            Icon(
-                                Icons.Filled.Edit,
-                                contentDescription = "Localized description",
-                            )
-                        }
-                        IconButton(onClick = { /* do something */ }) {
-                            Icon(
-                                Icons.Filled.Edit,
-                                contentDescription = "Localized description",
-                            )
-                        }
-                        IconButton(onClick = { /* do something */ }) {
-                            Icon(
-                                Icons.Filled.Edit,
-                                contentDescription = "Localized description",
-                            )
-                        }
-                    }
+//        bottomBar = {
+////            BottomAppBar(
+////                modifier = Modifier,
+////                actions = {
+////                    Row(modifier = Modifier.fillMaxWidth(),
+////                        horizontalArrangement = Arrangement.SpaceEvenly,
+////                        verticalAlignment = Alignment.CenterVertically) {
+////                        IconButton(onClick = { /* do something */ }) {
+////                            Icon(Icons.Filled.Home, contentDescription = "Localized description")
+////                        }
+////                        IconButton(onClick = { /* do something */ }) {
+////                            Icon(
+////                                Icons.Filled.Favorite,
+////                                contentDescription = "Localized description",
+////                            )
+////                        }
+////                        IconButton(onClick = { /* do something */ }) {
+////                            Icon(
+////                                Icons.Filled.Settings,
+////                                contentDescription = "Localized description",
+////                            )
+////                        }
+////                        IconButton(onClick = { /* do something */ }) {
+////                            Icon(
+////                                Icons.Filled.Share,
+////                                contentDescription = "Localized description",
+////                            )
+////                        }
+////                    }
+////
+////                })
+//        },
+        content = {
+            BurgerList(burgers = burgerList, modifier = Modifier.padding(it))
+        }
+    )
 
-                })
-        },
-    ) { paddingValues ->
-        BurgerList(burgers = burgerList, modifier = Modifier.padding(paddingValues))
-    }
 
 }
 

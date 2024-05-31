@@ -10,7 +10,7 @@ class HeaderInjector @Inject constructor() : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
         val authRequest = originalRequest.newBuilder()
-            .addHeader("X-RapidAPI-Key", "7844d08053mshc200634488b4192p1d70cdjsn933b6a71c6c0")
+            .addHeader("X-RapidAPI-Key", "58618a0909msh2073cb601d2840cp136bddjsncadbad3c852d")
             .addHeader("X-RapidAPI-Host", "burgers-hub.p.rapidapi.com")
 
         return chain.proceed(authRequest.build())
