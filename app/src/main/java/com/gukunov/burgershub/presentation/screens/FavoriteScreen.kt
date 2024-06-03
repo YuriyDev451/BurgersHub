@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun FavoriteScreen() {
 
+
     Box(
         modifier = Modifier
             .fillMaxWidth(),

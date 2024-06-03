@@ -64,6 +64,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -76,11 +77,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.lifecycleScope
 import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
+import com.gukunov.burgershub.R
 import com.gukunov.burgershub.domain.entity.BurgerItem
 import com.gukunov.burgershub.domain.uiModel.BurgerItemUIModel
 import com.gukunov.burgershub.presentation.navigation.AppNavigation
@@ -94,7 +98,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            //BurgerListScreen()
+//            BurgerListScreen()
 //Theme
 //            Scaffold {
 //
@@ -113,57 +117,59 @@ class MainActivity : ComponentActivity() {
 fun BurgerListScreen(viewModel: BurgerListViewModel = hiltViewModel()) {
     val burgerList by viewModel.burgers.collectAsState(initial = emptyList())
 //    BurgerList(burgers = burgerList)
+    BurgerList(burgers = burgerList)
+//    , modifier = Modifier.padding()
 
-    Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                titleContentColor = MaterialTheme.colorScheme.primary),
-                modifier = Modifier.clip(RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp)),
-                title = {
-                    Text(
-                        text = "BurgersHub",
-                        fontSize = 24.sp,
-                        color = MaterialTheme.colorScheme.primary)
-
-                })
-        },
-//        bottomBar = {
-////            BottomAppBar(
-////                modifier = Modifier,
-////                actions = {
-////                    Row(modifier = Modifier.fillMaxWidth(),
-////                        horizontalArrangement = Arrangement.SpaceEvenly,
-////                        verticalAlignment = Alignment.CenterVertically) {
-////                        IconButton(onClick = { /* do something */ }) {
-////                            Icon(Icons.Filled.Home, contentDescription = "Localized description")
-////                        }
-////                        IconButton(onClick = { /* do something */ }) {
-////                            Icon(
-////                                Icons.Filled.Favorite,
-////                                contentDescription = "Localized description",
-////                            )
-////                        }
-////                        IconButton(onClick = { /* do something */ }) {
-////                            Icon(
-////                                Icons.Filled.Settings,
-////                                contentDescription = "Localized description",
-////                            )
-////                        }
-////                        IconButton(onClick = { /* do something */ }) {
-////                            Icon(
-////                                Icons.Filled.Share,
-////                                contentDescription = "Localized description",
-////                            )
-////                        }
-////                    }
-////
-////                })
+//    Scaffold(
+//        topBar = {
+//            CenterAlignedTopAppBar(colors = TopAppBarDefaults.topAppBarColors(
+//                containerColor = MaterialTheme.colorScheme.primaryContainer,
+//                titleContentColor = MaterialTheme.colorScheme.primary),
+//                modifier = Modifier.clip(RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp)),
+//                title = {
+//                    Text(
+//                        text = "BurgersHub",
+//                        fontSize = 24.sp,
+//                        color = MaterialTheme.colorScheme.primary)
+//
+//                })
 //        },
-        content = {
-            BurgerList(burgers = burgerList, modifier = Modifier.padding(it))
-        }
-    )
+////        bottomBar = {
+//////            BottomAppBar(
+//////                modifier = Modifier,
+//////                actions = {
+//////                    Row(modifier = Modifier.fillMaxWidth(),
+//////                        horizontalArrangement = Arrangement.SpaceEvenly,
+//////                        verticalAlignment = Alignment.CenterVertically) {
+//////                        IconButton(onClick = { /* do something */ }) {
+//////                            Icon(Icons.Filled.Home, contentDescription = "Localized description")
+//////                        }
+//////                        IconButton(onClick = { /* do something */ }) {
+//////                            Icon(
+//////                                Icons.Filled.Favorite,
+//////                                contentDescription = "Localized description",
+//////                            )
+//////                        }
+//////                        IconButton(onClick = { /* do something */ }) {
+//////                            Icon(
+//////                                Icons.Filled.Settings,
+//////                                contentDescription = "Localized description",
+//////                            )
+//////                        }
+//////                        IconButton(onClick = { /* do something */ }) {
+//////                            Icon(
+//////                                Icons.Filled.Share,
+//////                                contentDescription = "Localized description",
+//////                            )
+//////                        }
+//////                    }
+//////
+//////                })
+////        },
+//        content = {
+//            BurgerList(burgers = burgerList, modifier = Modifier.padding(it))
+//        }
+//    )
 
 
 }
@@ -191,7 +197,8 @@ fun BurgerItemView(burger: BurgerItem) {
             .fillMaxWidth()
             .padding(start = 8.dp, end = 8.dp, bottom = 10.dp, top = 10.dp),
         shape = RoundedCornerShape(8.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFE4FBFD))
     ) {
     Row(
         modifier = Modifier
@@ -200,7 +207,7 @@ fun BurgerItemView(burger: BurgerItem) {
 
     ) {
         Image(
-            painter = rememberImagePainter(burger.images.firstOrNull()?.sm),
+            painter = rememberAsyncImagePainter(burger.images.firstOrNull()?.sm),
             contentDescription = null,
             modifier = Modifier
                 .size(64.dp)
@@ -211,11 +218,23 @@ fun BurgerItemView(burger: BurgerItem) {
             Text(
                 text = it,
                 style = MaterialTheme.typography.bodyMedium,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
                     .padding(16.dp)
+                    .weight(1f)
             )
         }
+        Spacer(modifier = Modifier.weight(1f))
+        Image(imageVector = Icons.Default.Favorite,
+            contentDescription = "Favorite",
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .padding(end = 10.dp)
+                .size(24.dp)
+
+        )
     }
 }
 }
