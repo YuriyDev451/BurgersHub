@@ -23,21 +23,21 @@ import com.gukunov.burgershub.presentation.BurgerListViewModel
 @Composable
 fun HomeScreen(viewModel: BurgerListViewModel = hiltViewModel()) {
     val burgerList by viewModel.burgers.collectAsState(initial = emptyList())
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth(),
-        contentAlignment = Alignment.Center
-    ) {
-//        Text(
-//            text = "Добро пожаловать в HomeScreen",
-//            modifier = Modifier.padding(16.dp),
-//            color = Color.Black,
-//            fontSize = 20.sp,
-//            fontWeight = FontWeight.Bold,
-//            fontFamily = FontFamily.Serif
-//        )
-        BurgerList(burgerList)
-    }
+    BurgerList(burgerList)
+//    Box(
+//        modifier = Modifier
+//            .fillMaxWidth(),
+//        contentAlignment = Alignment.Center
+//    ) {
+////        Text(
+////            text = "Добро пожаловать в HomeScreen",
+////            modifier = Modifier.padding(16.dp),
+////            color = Color.Black,
+////            fontSize = 20.sp,
+////            fontWeight = FontWeight.Bold,
+////            fontFamily = FontFamily.Serif
+////        )
+//        BurgerList(burgerList)
+//    }
 
 }
