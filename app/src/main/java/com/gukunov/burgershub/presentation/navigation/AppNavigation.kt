@@ -30,7 +30,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.gukunov.burgershub.presentation.BurgerList
-import com.gukunov.burgershub.presentation.BurgerListScreen
 import com.gukunov.burgershub.presentation.BurgerListViewModel
 import com.gukunov.burgershub.presentation.screens.FavoriteScreen
 import com.gukunov.burgershub.presentation.screens.HomeScreen
