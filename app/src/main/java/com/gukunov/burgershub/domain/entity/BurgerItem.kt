@@ -23,7 +23,7 @@ data class BurgerItem(
     @SerializedName("desc") var desc: String? = null,
     @SerializedName("ingredients") var ingredients: List<Ingredient> = listOf(),
     @SerializedName("price") var price: Double? = null,
-    @SerializedName("veg") var veg: Boolean? = null
+    @SerializedName("veg") var veg: Boolean? = null,
 ) : Parcelable
 
 

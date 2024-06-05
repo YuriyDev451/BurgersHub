@@ -56,6 +56,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
@@ -70,12 +71,17 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -240,17 +246,63 @@ fun BurgerItemView(burger: BurgerItem) {
             )
         }
         Spacer(modifier = Modifier.weight(1f))
-        Image(imageVector = Icons.Default.Favorite,
-            contentDescription = "Favorite",
-            modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .padding(end = 10.dp)
-                .size(24.dp)
-
-        )
+//        Image(imageVector = Icons.Default.Favorite,
+//            contentDescription = "Favorite",
+//            modifier = Modifier
+//                .align(Alignment.CenterVertically)
+//                .padding(end = 10.dp)
+//                .size(24.dp)
+//
+//        )
+        FavoriteScreen()
     }
 }
 }
+
+@Composable
+fun FavoriteScreen(
+    favoriteViewModel: FavoriteState = hiltViewModel()
+) {
+    FavoriteButton(
+        isFavorite = favoriteViewModel.isFavorite,
+        onToggleFavorite = { favoriteViewModel.toggleFavorite() }
+    )
+}
+
+@Composable
+fun FavoriteButton(
+    isFavorite: Boolean,
+    onToggleFavorite: () -> Unit,
+    modifier: Modifier = Modifier,
+    color: Color = Color(0xff000000)
+) {
+
+//    var isFavorite by remember { mutableStateOf(false) }
+
+    IconToggleButton(
+        checked = isFavorite,
+        onCheckedChange = {
+//            isFavorite = !isFavorite
+            onToggleFavorite()
+        }
+    ) {
+        Icon(
+            tint = color,
+            modifier = modifier.graphicsLayer {
+                scaleX = 1.3f
+                scaleY = 1.3f
+            },
+            imageVector = if (isFavorite) {
+                Icons.Filled.Favorite
+            } else {
+                Icons.Default.FavoriteBorder
+            },
+            contentDescription = null
+        )
+    }
+
+}
+
 
 //@Composable
 //fun BottomAppBar(

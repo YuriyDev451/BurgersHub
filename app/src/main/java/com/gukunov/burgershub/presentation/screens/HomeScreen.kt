@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.gukunov.burgershub.presentation.BurgerList
-import com.gukunov.burgershub.presentation.BurgerListScreen
 import com.gukunov.burgershub.presentation.BurgerListViewModel
 
 @Composable

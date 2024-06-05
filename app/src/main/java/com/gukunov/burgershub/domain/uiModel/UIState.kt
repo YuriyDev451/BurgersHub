@@ -17,6 +17,7 @@ data class BurgerItemUIModel(
 )
 
 
+
 data class ImageUIModel(
     val lg: String,
     val sm: String

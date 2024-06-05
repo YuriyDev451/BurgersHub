@@ -30,7 +30,7 @@ class BurgersToUIStateMapper @Inject constructor(): BaseMapper<List<BurgerItem>,
                 },
                 name = burger.name?:"",
                 price = burger.price?: 0.0,
-                veg = burger.veg?: false
+                veg = burger.veg?: false,
             )
 
         }
