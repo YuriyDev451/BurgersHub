@@ -13,6 +13,7 @@ import com.gukunov.burgershub.domain.uiModel.mapper.BurgersToUIStateMapper
 import com.gukunov.burgershub.domain.useCase.GetBurgerListUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,6 +26,9 @@ class BurgerListViewModel @Inject constructor(
     val state: MutableStateFlow<State?> = MutableStateFlow(null)
 
     val burgers: MutableStateFlow<List<BurgerItem>?> = MutableStateFlow(null)
+
+    private val _favoriteBurgers = MutableStateFlow<List<BurgerItem>>(emptyList())
+    val favoriteBurgers: StateFlow<List<BurgerItem>> = _favoriteBurgers
 
 
 //    private var _burgers = MutableLiveData<List<BurgerItem>?>()
@@ -49,11 +53,45 @@ class BurgerListViewModel @Inject constructor(
                     }
                 }
 
-//                val result = mapper.map(burger.data!!)
-//               // _burgers.postValue(result)
-//                _burgers.postValue(burger.data)
             }
         }
     }
+/*
+
+    private val _favoriteBurgers = MutableStateFlow<List<BurgerItem>>(emptyList())
+    val favoriteBurgers: StateFlow<List<BurgerItem>> = _favoriteBurgers
+
+    fun toggleFavorite(burger: BurgerItem) {
+        val currentFavorites = _favoriteBurgers.value.toMutableList()
+        if (burger.isFavorite) {
+            currentFavorites.remove(burger)
+        } else {
+            currentFavorites.add(burger)
+        }
+        _favoriteBurgers.value = currentFavorites
+    }*/
+/*
+    fun toggleFavorite(burger: BurgerItem) {
+        val updatedBurgers = burgers.value?.map {
+            if (it.id == burger.id) it.copy(isFavorite = !it.isFavorite) else it
+        }
+        burgers.value = updatedBurgers
+    }*/
+
+    private fun updateFavoriteBurgers(burgerList: List<BurgerItem>) {
+        val favorites = burgerList.filter { it.isFavorite }
+        _favoriteBurgers.value = favorites
+    }
+
+    fun toggleFavorite(burger: BurgerItem) {
+        val updatedBurgers = burgers.value?.map {
+            if (it.id == burger.id) it.copy(isFavorite = !it.isFavorite) else it
+        }
+        updatedBurgers?.let {
+            burgers.value = it
+            updateFavoriteBurgers(it)
+        }
+    }
+
 
 }

@@ -37,17 +37,17 @@ import com.gukunov.burgershub.presentation.screens.ProfileScreen
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun AppNavigation(navController: NavHostController){
+fun AppNavigation(navController: NavHostController,viewModel: BurgerListViewModel ){
 
     NavHost(
         navController = navController,
         startDestination = Screens.HomeScreen.name
     ) {
         composable(route = Screens.HomeScreen.name) {
-            HomeScreen()
+            HomeScreen(viewModel)
         }
         composable(route = Screens.FavoriteScreen.name) {
-            FavoriteScreen()
+            FavoriteScreen(viewModel)
         }
         composable(route = Screens.ProfileScreen.name) {
             ProfileScreen()

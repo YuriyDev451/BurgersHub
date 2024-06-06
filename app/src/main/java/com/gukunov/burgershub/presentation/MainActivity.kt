@@ -101,6 +101,8 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    //private val favoriteViewModel: FavoriteState by viewModels()
+    private val burgerListViewModel: BurgerListViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -111,7 +113,7 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
             ) {
-                MainS()
+                MainS(burgerListViewModel)
             }
 
 
@@ -119,86 +121,9 @@ class MainActivity : ComponentActivity() {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-//
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun BurgerListScreen(viewModel: BurgerListViewModel = hiltViewModel()) {
-//    val burgerList by viewModel.burgers.collectAsState(initial = emptyList())
-////    BurgerList(burgers = burgerList)
-//    BurgerList(burgers = burgerList)
-////    , modifier = Modifier.padding()
-//
-////    Scaffold(
-////        topBar = {
-////            CenterAlignedTopAppBar(colors = TopAppBarDefaults.topAppBarColors(
-////                containerColor = MaterialTheme.colorScheme.primaryContainer,
-////                titleContentColor = MaterialTheme.colorScheme.primary),
-////                modifier = Modifier.clip(RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp)),
-////                title = {
-////                    Text(
-////                        text = "BurgersHub",
-////                        fontSize = 24.sp,
-////                        color = MaterialTheme.colorScheme.primary)
-////
-////                })
-////        },
-//////        bottomBar = {
-////////            BottomAppBar(
-////////                modifier = Modifier,
-////////                actions = {
-////////                    Row(modifier = Modifier.fillMaxWidth(),
-////////                        horizontalArrangement = Arrangement.SpaceEvenly,
-////////                        verticalAlignment = Alignment.CenterVertically) {
-////////                        IconButton(onClick = { /* do something */ }) {
-////////                            Icon(Icons.Filled.Home, contentDescription = "Localized description")
-////////                        }
-////////                        IconButton(onClick = { /* do something */ }) {
-////////                            Icon(
-////////                                Icons.Filled.Favorite,
-////////                                contentDescription = "Localized description",
-////////                            )
-////////                        }
-////////                        IconButton(onClick = { /* do something */ }) {
-////////                            Icon(
-////////                                Icons.Filled.Settings,
-////////                                contentDescription = "Localized description",
-////////                            )
-////////                        }
-////////                        IconButton(onClick = { /* do something */ }) {
-////////                            Icon(
-////////                                Icons.Filled.Share,
-////////                                contentDescription = "Localized description",
-////////                            )
-////////                        }
-////////                    }
-////////
-////////                })
-//////        },
-////        content = {
-////            BurgerList(burgers = burgerList, modifier = Modifier.padding(it))
-////        }
-////    )
-//
-//
-//}
-
 @Composable
-fun BurgerList(burgers: List<BurgerItem>?, modifier: Modifier = Modifier) {
-    val burgersState = remember { burgers?.let { mutableStateListOf(*it.toTypedArray()) } }
+fun BurgerList(burgers: List<BurgerItem>?,viewModel: BurgerListViewModel, modifier: Modifier = Modifier) {
     burgers?.let {
-
         LazyColumn(
             modifier = modifier
                 .fillMaxSize()
@@ -206,28 +131,16 @@ fun BurgerList(burgers: List<BurgerItem>?, modifier: Modifier = Modifier) {
             contentPadding = PaddingValues(16.dp)
         ) {
             items(burgers) { burger ->
-                BurgerItemView(burger
-//                    ,onToggleFavorite = { updatedBurger ->
-//                    val index = burgersState?.indexOfFirst { it.id == updatedBurger.id }
-//                    if (index != -1) {
-//                        index?.let { it1 ->
-//                            burgersState?.set(
-//                                it1,
-//                                updatedBurger.copy(isFavorite = !updatedBurger.isFavorite)
-//                            )
-//                        }
-//                    }
-//                }
-                )
+                BurgerItemView(burger,viewModel)
             }
         }
     }
 }
 
 @Composable
-fun BurgerItemView(burger: BurgerItem ) {
+fun BurgerItemView(burger: BurgerItem, viewModel: BurgerListViewModel  ) {
+    val favoriteState = remember { mutableStateOf(burger.isFavorite) }
 
-    //onToggleFavorite: (BurgerItem) -> Unit
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -263,19 +176,23 @@ fun BurgerItemView(burger: BurgerItem ) {
             )
         }
         Spacer(modifier = Modifier.weight(1f))
-//        Image(imageVector = Icons.Default.Favorite,
-//            contentDescription = "Favorite",
-//            modifier = Modifier
-//                .align(Alignment.CenterVertically)
-//                .padding(end = 10.dp)
-//                .size(24.dp)
-//
-//        )
-        //FavoriteButton(isFavorite = burger.isFavorite, onToggleFavorite = { onToggleFavorite(burger) })
+
+
+        FavoriteButton(
+            isFavorite = favoriteState.value,
+            onToggleFavorite = {
+//                favoriteState.value = !favoriteState.value
+//                burger.isFavorite = favoriteState.value // Обновление состояния элемента бургера
+//                viewModel.toggleFavorite(burger)
+
+                favoriteState.value = !favoriteState.value
+                viewModel.toggleFavorite(burger)
+            }
+        )
     }
 }
 }
-
+//
 //@Composable
 //fun FavoriteScreen(
 //    favoriteViewModel: FavoriteState = hiltViewModel()
@@ -293,13 +210,9 @@ fun FavoriteButton(
     modifier: Modifier = Modifier,
     color: Color = Color(0xff000000)
 ) {
-
-//    var isFavorite by remember { mutableStateOf(false) }
-
     IconToggleButton(
         checked = isFavorite,
         onCheckedChange = {
-//            isFavorite = !isFavorite
             onToggleFavorite()
         }
     ) {
@@ -317,6 +230,5 @@ fun FavoriteButton(
             contentDescription = null
         )
     }
-
 }
 
