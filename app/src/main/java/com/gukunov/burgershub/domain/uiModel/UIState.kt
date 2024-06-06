@@ -13,7 +13,8 @@ data class BurgerItemUIModel(
     val ingredients: List<IngredientUIModel>,
     val name: String,
     val price: Double,
-    val veg: Boolean
+    val veg: Boolean,
+    var isFavorite: Boolean
 )
 
 

@@ -8,7 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class FavoriteState@Inject constructor(): ViewModel() {
+class FavoriteState @Inject constructor(): ViewModel() {
     var isFavorite by mutableStateOf(false)
     private set
 

@@ -36,7 +36,6 @@ import com.gukunov.burgershub.presentation.screens.HomeScreen
 import com.gukunov.burgershub.presentation.screens.ProfileScreen
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppNavigation(navController: NavHostController){
 
@@ -46,7 +45,6 @@ fun AppNavigation(navController: NavHostController){
     ) {
         composable(route = Screens.HomeScreen.name) {
             HomeScreen()
-            //BurgerListScreen()
         }
         composable(route = Screens.FavoriteScreen.name) {
             FavoriteScreen()
@@ -55,9 +53,13 @@ fun AppNavigation(navController: NavHostController){
             ProfileScreen()
         }
     }
-
-
 }
+
+
+
+
+
+
 
 //    val navController = rememberNavController()
 //

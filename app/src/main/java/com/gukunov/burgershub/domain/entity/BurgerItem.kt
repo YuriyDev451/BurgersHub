@@ -24,6 +24,7 @@ data class BurgerItem(
     @SerializedName("ingredients") var ingredients: List<Ingredient> = listOf(),
     @SerializedName("price") var price: Double? = null,
     @SerializedName("veg") var veg: Boolean? = null,
+    var isFavorite: Boolean = false
 ) : Parcelable
 
 

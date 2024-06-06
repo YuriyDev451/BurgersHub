@@ -21,7 +21,7 @@ import com.gukunov.burgershub.presentation.BurgerListViewModel
 
 @Composable
 fun HomeScreen(viewModel: BurgerListViewModel = hiltViewModel()) {
-    val burgerList by viewModel.burgers.collectAsState(initial = emptyList())
+    val burgerList by viewModel.burgers.collectAsState()
     BurgerList(burgerList)
 //    Box(
 //        modifier = Modifier

@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BurgerListViewModel @Inject constructor(
-    private val getBurgerListUseCase: GetBurgerListUseCase
+    private val getBurgerListUseCase: GetBurgerListUseCase,
     //private val mapper: BurgersToUIStateMapper
 ) : ViewModel() {
     val state: MutableStateFlow<State?> = MutableStateFlow(null)
@@ -43,6 +43,7 @@ class BurgerListViewModel @Inject constructor(
                     is Resource.Success ->{
                         state.emit(State.success())
                         burger.data.let {
+                            //val result = it?.let { it1 -> mapper.map(it1) }
                             burgers.emit(it)
                         }
                     }

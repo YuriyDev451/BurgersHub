@@ -78,6 +78,7 @@ import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -195,7 +196,9 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun BurgerList(burgers: List<BurgerItem>?, modifier: Modifier = Modifier) {
+    val burgersState = remember { burgers?.let { mutableStateListOf(*it.toTypedArray()) } }
     burgers?.let {
+
         LazyColumn(
             modifier = modifier
                 .fillMaxSize()
@@ -203,14 +206,28 @@ fun BurgerList(burgers: List<BurgerItem>?, modifier: Modifier = Modifier) {
             contentPadding = PaddingValues(16.dp)
         ) {
             items(burgers) { burger ->
-                BurgerItemView(burger)
+                BurgerItemView(burger
+//                    ,onToggleFavorite = { updatedBurger ->
+//                    val index = burgersState?.indexOfFirst { it.id == updatedBurger.id }
+//                    if (index != -1) {
+//                        index?.let { it1 ->
+//                            burgersState?.set(
+//                                it1,
+//                                updatedBurger.copy(isFavorite = !updatedBurger.isFavorite)
+//                            )
+//                        }
+//                    }
+//                }
+                )
             }
         }
     }
 }
 
 @Composable
-fun BurgerItemView(burger: BurgerItem) {
+fun BurgerItemView(burger: BurgerItem ) {
+
+    //onToggleFavorite: (BurgerItem) -> Unit
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -254,20 +271,20 @@ fun BurgerItemView(burger: BurgerItem) {
 //                .size(24.dp)
 //
 //        )
-        FavoriteScreen()
+        //FavoriteButton(isFavorite = burger.isFavorite, onToggleFavorite = { onToggleFavorite(burger) })
     }
 }
 }
 
-@Composable
-fun FavoriteScreen(
-    favoriteViewModel: FavoriteState = hiltViewModel()
-) {
-    FavoriteButton(
-        isFavorite = favoriteViewModel.isFavorite,
-        onToggleFavorite = { favoriteViewModel.toggleFavorite() }
-    )
-}
+//@Composable
+//fun FavoriteScreen(
+//    favoriteViewModel: FavoriteState = hiltViewModel()
+//) {
+//    FavoriteButton(
+//        isFavorite = favoriteViewModel.isFavorite,
+//        onToggleFavorite = { favoriteViewModel.toggleFavorite() }
+//    )
+//}
 
 @Composable
 fun FavoriteButton(
@@ -302,239 +319,4 @@ fun FavoriteButton(
     }
 
 }
-
-
-//@Composable
-//fun BottomAppBar(
-//    modifier: Modifier = Modifier,
-//    containerColor: Color = BottomAppBarDefaults.containerColor,
-//    contentColor: Color = contentColorFor(containerColor),
-//    tonalElevation: Dp = BottomAppBarDefaults.ContainerElevation,
-//    contentPadding: PaddingValues = BottomAppBarDefaults.ContentPadding,
-//    windowInsets: WindowInsets = BottomAppBarDefaults.windowInsets,
-//    content: @Composable RowScope.() -> Unit
-//): Unit{
-//
-//}
-
-
-
-/*
-@Composable
-fun BurgerItem(burger: BurgerItem) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Image(
-            painter = rememberImagePainter(burger.images),
-            contentDescription = null,
-            modifier = Modifier
-                .size(64.dp)
-                .clip(CircleShape)
-                .border(2.dp, Color.Gray, CircleShape)
-        )
-        Spacer(modifier = Modifier.width(16.dp))
-        burger.name?.let { Text(text = it, style = MaterialTheme.typography.bodyMedium) }
-    }
-}
-
-@Composable
-fun BurgerListScreen(viewModel: BurgerListViewModel = hiltViewModel()) {
-    LaunchedEffect(Unit) {
-        viewModel.getBurgerList()
-    }
-    val burgers by viewModel.burgers.observeAsState()
-    val bg = listOf("dfd", "gfggf", "sdfsdg", "etyhe", "wetrtwert", "vfdgre")
-    LaunchedEffect(Unit) {
-        viewModel.getBurgerList()
-    }
-
-    LazyColumn {
- //       burgers?.let {
-            items(burgers?: emptyList()) {
-                BurgerItem(it)
-            }
-//        }
-    }
-}
-
-*/
-
-
-
-//@Composable
-//fun MyScreen(viewModel: BurgerListViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
-//    val data by viewModel.burgers.observeAsState(emptyList())
-//
-//    LazyColumn {
-//        items(data) { item ->
-//            MyCard(item)
-//        }
-//    }
-//}
-//
-//@Composable
-//fun MyCard(item: BurgerUIState) {
-//    Card(
-//        modifier = Modifier
-//            .padding(8.dp)
-//            .fillMaxWidth(),
-//        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-//    ) {
-//        Row(
-//            modifier = Modifier
-//                .padding(16.dp)
-//                .fillMaxWidth(),
-//            verticalAlignment = Alignment.CenterVertically
-//        ) {
-//            Image(
-//                painter = rememberImagePainter(data = item.burgers.firstOrNull()?.images),
-//                contentDescription = null,
-//                modifier = Modifier
-//                    .size(64.dp)
-//                    .clip(CircleShape)
-//            )
-//            Spacer(modifier = Modifier.width(16.dp))
-//            item.burgers.firstOrNull()?.name?.let {
-//                Text(
-//                    text = it,
-//                    style = MaterialTheme.typography.bodyMedium
-//                )
-//            }
-//        }
-//    }
-//}
-//
-//
-
-
-
-
-//@Composable
-//fun BurgerItem(burger: BurgerUIState) {
-//    Row(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(8.dp),
-//        verticalAlignment = Alignment.CenterVertically
-//    ) {
-//        Image(
-//            painter = rememberImagePainter(burger.burgers.firstOrNull()?.images),
-//            contentDescription = null,
-//            modifier = Modifier
-//                .size(64.dp)
-//                .clip(CircleShape)
-//                .border(2.dp, MaterialTheme.colorScheme.primary, CircleShape)
-//        )
-//        Spacer(modifier = Modifier.width(16.dp))
-//        burger.burgers.firstOrNull()?.name?.let { Text(text = it, style = MaterialTheme.typography.bodyMedium) }
-//    }
-//}
-//
-//@Composable
-//fun BurgerListScreen(viewModel: BurgerListViewModel = hiltViewModel()) {
-//    val burgersState by viewModel.burgers.observeAsState(BurgerUIState.Loading)
-//
-//    when (burgersState) {
-//        is BurgerUIState.Loading -> {
-//            // Отображение индикатора загрузки
-//            CircularProgressIndicator()
-//        }
-//        is BurgerUIState.Success -> {
-//            val burgers = (burgersState as BurgerUIState.Success).burgers
-//            LazyColumn {
-//                items(burgers) { burger ->
-//                    BurgerItem(burger = burger)
-//                }
-//            }
-//        }
-//        is BurgerUIState.Error -> {
-//            // Отображение сообщения об ошибке
-//            Text(text = "Ошибка: ${(burgersState as BurgerUIState.Error).message}")
-//        }
-//    }
-//
-//    LaunchedEffect(Unit) {
-//        viewModel.getBurgerList()
-//    }
-//}
-
-
-//
-//@Composable
-//fun BurgerCardList(burgers: List<BurgerUIState>) {
-//    LazyColumn {
-//        items(burgers) { burger ->
-//            BurgerListItem(burger)
-//        }
-//    }
-//}
-//
-//
-//@Composable
-//fun BurgerListItem(item: BurgerUIState) {
-//    Card(
-//        modifier = Modifier
-//            .padding(8.dp)
-//            .fillMaxWidth(),
-//        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-//
-//    ) {
-////        Row(
-////            modifier = Modifier
-////                .padding(16.dp)
-////                .fillMaxWidth(),
-////            verticalAlignment = Alignment.CenterVertically
-////        ) {
-////
-////        }
-//        Box(
-//        ) {
-//            Row {
-//                Image(
-//                    painter = rememberAsyncImagePainter(model = item.burgers.firstOrNull()?.images),
-//                    contentDescription = null,
-//                    contentScale = ContentScale.Crop
-//                )
-//                Spacer(modifier =  Modifier.height(8.dp))
-//                item.burgers.firstOrNull()?.name?.let { Text(text = it, style = MaterialTheme.typography.bodyMedium) }
-//            }
-//        }
-//    }
-//}
-//
-//@Composable
-//fun BurgerListScreen(viewModel: BurgerListViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
-//    val burgerUIState by viewModel.burgers.observeAsState(BurgerUIState(emptyList()))
-//
-//}
-//
-////@Composable
-////fun BurgerListScreen(viewModel: BurgerListViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
-////    val burgers = viewModel.burgers
-////
-////
-////    Column(
-////        modifier = Modifier.fillMaxSize(),
-////        verticalArrangement = Arrangement.Center,
-////        horizontalAlignment = Alignment.CenterHorizontally
-////    ) {
-////        Button(onClick = {
-////            viewModel.getBurgerList()
-////        }) {
-////            Text(text = "Load Burgers")
-////        }
-////
-////        // Display burger data
-////        burgers.value?.let { burgerResponse ->
-////            // Replace this with your UI to display the burgers
-////            Text(text = burgerResponse.toString())
-////        }
-////    }
-////}
-
-
 
